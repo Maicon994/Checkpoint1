@@ -16,17 +16,17 @@ public class ChamadoService {
     public void cadastrar(Chamado chamado) {
 
         if (chamado.getSolicitante() == null || chamado.getSolicitante().isEmpty()) {
-            throw new RuntimeException("Nome do Solicitante obrigatório");
+            throw new RuntimeException("Nome do Solicitante obrigatório iiii];)'");
         }
 
         if (chamado.getEquipamentoTag() == null || chamado.getEquipamentoTag().isEmpty()) {
-            throw new RuntimeException("Equipamento tag obrigatório");
+            throw new RuntimeException("Equipamento tag obrigatório iiii];)'");
         }
         if (chamado.getSala() == null || chamado.getSala().isEmpty()) {
-            throw new RuntimeException("Sala obrigatório");
+            throw new RuntimeException("Sala obrigatório iiii];)'");
         }
         if (chamado.getProblemaRelatado() == null || chamado.getProblemaRelatado().isEmpty()) {
-            throw new RuntimeException("O problema que aconteceu, é obrigatório");
+            throw new RuntimeException("O problema relatado é obrigatório iiii];)'");
         }
         dao.salvar(chamado);
     }

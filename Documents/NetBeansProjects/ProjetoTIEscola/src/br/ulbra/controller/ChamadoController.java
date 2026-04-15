@@ -15,8 +15,7 @@ public class ChamadoController {
     }
 
     public String cadastrar(String solicitante, String sala, String equipamentoTag,
-                            String problemaRelatado, String diagnosticoTecnico,
-                            String prioridade, String status, String dataAbertura) {
+            String diagnosticoTecnico, String problemaRelatado, String prioridade, String status, String dataAbertura) {
 
         try {
             Chamado chamado = new Chamado();
@@ -47,8 +46,7 @@ public class ChamadoController {
     }
 
     public String atualizar(int id, String solicitante, String sala, String equipamentoTag,
-                            String problemaRelatado, String diagnosticoTecnico,
-                            String prioridade, String status, String dataAbertura) {
+            String diagnosticoTecnico, String problemaRelatado, String prioridade, String status, String dataAbertura) {
 
         try {
             Chamado chamado = new Chamado();
@@ -82,4 +80,5 @@ public class ChamadoController {
             return "Erro: " + e.getMessage();
         }
     }
+
 }

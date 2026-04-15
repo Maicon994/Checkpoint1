@@ -12,7 +12,7 @@ public class ChamadoDAOImpl implements ChamadoDAO {
     public void salvar(Chamado chamado) {
 
         String sql = "INSERT INTO chamado_tecnico "
-                + "(solicitante, sala, equipamento_tag, problema_relatado, diagnostico_tecnico, prioridade, status, dataAbertura) "
+                + "(solicitante, sala, equipamento_tag, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -85,8 +85,8 @@ public class ChamadoDAOImpl implements ChamadoDAO {
                         rs.getString("solicitante"),
                         rs.getString("sala"),
                         rs.getString("equipamento_tag"),
-                        rs.getString("problema_relatado"),
                         rs.getString("diagnostico_tecnico"),
+                        rs.getString("problema_relatado"),
                         rs.getString("prioridade"),
                         rs.getString("status"),
                         rs.getString("data_abertura")
@@ -119,7 +119,6 @@ public class ChamadoDAOImpl implements ChamadoDAO {
             stmt.setString(7, chamado.getStatus());
             stmt.setString(8, chamado.getDataAbertura());
             stmt.setInt(9, chamado.getId());
-            
 
             stmt.executeUpdate();
 
