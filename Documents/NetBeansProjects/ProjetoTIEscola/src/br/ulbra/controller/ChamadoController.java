@@ -14,8 +14,8 @@ public class ChamadoController {
         this.service = new ChamadoService(new ChamadoDAOImpl());
     }
 
-    public String cadastrar(String solicitante, String sala, String equipamentoTag,
-            String diagnosticoTecnico, String problemaRelatado, String prioridade, String status, String dataAbertura) {
+    public String cadastrar(String solicitante, String sala, String equipamentoTag, String problemaRelatado,
+            String diagnosticoTecnico,  String prioridade, String status, String dataAbertura) {
 
         try {
             Chamado chamado = new Chamado();
@@ -45,8 +45,8 @@ public class ChamadoController {
         return service.listar();
     }
 
-    public String atualizar(int id, String solicitante, String sala, String equipamentoTag,
-            String diagnosticoTecnico, String problemaRelatado, String prioridade, String status, String dataAbertura) {
+    public String atualizar(int id, String solicitante, String sala, String equipamentoTag, String problemaRelatado,
+            String diagnosticoTecnico, String prioridade, String status, String dataAbertura) {
 
         try {
             Chamado chamado = new Chamado();
