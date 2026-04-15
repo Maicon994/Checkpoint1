@@ -22,7 +22,7 @@ public class ClienteController {
             cliente.setCpf(cpf);
             cliente.setDataNasc(dataNasc);
             service.cadastrar(cliente);
-            return  "Cliente cadastrado com sucesso iiii];)'";
+            return  "Cliente cadastrado com sucesso";
         } catch (Exception e) {
             return "Erro:"+e.getMessage();
         }
