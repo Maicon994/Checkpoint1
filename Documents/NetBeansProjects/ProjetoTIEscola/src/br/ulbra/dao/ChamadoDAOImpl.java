@@ -12,20 +12,19 @@ public class ChamadoDAOImpl implements ChamadoDAO {
     public void salvar(Chamado chamado) {
 
         String sql = "INSERT INTO chamado_tecnico "
-                + "(solicitante, sala, equipamento_tag, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                + "(id_usuario, id_equipamento, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, chamado.getSolicitante());
-            stmt.setString(2, chamado.getSala());
-            stmt.setString(3, chamado.getEquipamentoTag());
-            stmt.setString(4, chamado.getProblemaRelatado());
-            stmt.setString(5, chamado.getDiagnosticoTecnico());
-            stmt.setString(6, chamado.getPrioridade());
-            stmt.setString(7, chamado.getStatus());
-            stmt.setString(8, chamado.getDataAbertura());
+            stmt.setInt(1, chamado.getUsuario().getId_usuario());
+            stmt.setInt(2, chamado.getEquipamento().getIdEquipamento());
+            stmt.setString(3, chamado.getProblemaRelatado());
+            stmt.setString(4, chamado.getDiagnosticoTecnico());
+            stmt.setString(5, chamado.getPrioridade());
+            stmt.setString(6, chamado.getStatus());
+            stmt.setString(7, chamado.getDataAbertura());
 
             stmt.executeUpdate();
 

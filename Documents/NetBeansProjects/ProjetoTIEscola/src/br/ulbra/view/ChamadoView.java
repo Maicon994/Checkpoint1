@@ -5,8 +5,12 @@
  */
 package br.ulbra.view;
 
-import br.ulbra.controller.ChamadoController;
+import br.ulbra.model.Equipamento;
+import br.ulbra.model.Usuario;
+import br.ulbra.dao.EquipamentoDAO;
+import br.ulbra.dao.EquipamentoDAOImpl;
 import br.ulbra.model.Chamado;
+import br.ulbra.model.SessaoUsuario;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,9 +35,8 @@ public class ChamadoView extends javax.swing.JFrame {
         for (Chamado u : controller.listar()) {
             model.addRow(new Object[]{
                 u.getId(),
-                u.getSolicitante(),
-                u.getSala(),
-                u.getEquipamentoTag(),
+                u.getUsuario().getNome(),
+                u.getEquipamento().getTagPatrimonio(),
                 u.getProblemaRelatado(),
                 u.getDiagnosticoTecnico(),
                 u.getPrioridade(),
@@ -269,25 +272,27 @@ public class ChamadoView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     ChamadoController controller = new ChamadoController();
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-//String solicitante, String sala, String equipamentoTag, String problemaRelatado, String diagnosticoTecnico, String prioridade, String status, String dataAbertura
-            String mensagem = controller.cadastrar(
-                    txtSolicitante.getText(),
-                    txtSala.getText(),
-                    txtEquipamento_tag.getText(),
-                    txtProblemaRelatado.getText(),
-                    txtDiagnostico_tecnico.getText(),
-                    txtPrioridade.getText(),
-                    txtStatus.getText(),
-                    txtDataAbertura.getText()
-            );
+       try {
 
-            javax.swing.JOptionPane.showMessageDialog(null, mensagem);
-            listarTabela();
+        Equipamento equipamento = (Equipamento) comboEquipamento.getSelectedItem();
+        Usuario usuario = SessaoUsuario.getUsuario();
 
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage());
-        }
+        String mensagem = controller.cadastrar(
+                usuario,
+                equipamento,
+                txtProblemaRelatado.getText(),
+                txtDiagnostico_tecnico.getText(),
+                txtPrioridade.getText(),
+                txtStatus.getText(),
+                txtDataAbertura.getText()
+        );
+
+        JOptionPane.showMessageDialog(null, mensagem);
+        listarTabela();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage());
+    }
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 

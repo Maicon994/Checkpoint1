@@ -15,15 +15,12 @@ public class ChamadoService {
 
     public void cadastrar(Chamado chamado) {
 
-        if (chamado.getSolicitante() == null || chamado.getSolicitante().isEmpty()) {
-            throw new RuntimeException("Nome do Solicitante obrigatório iiii];)'");
+        if (chamado.getUsuario() == null) {
+            throw new RuntimeException("Usuário obrigatório");
         }
 
-        if (chamado.getEquipamentoTag() == null || chamado.getEquipamentoTag().isEmpty()) {
-            throw new RuntimeException("Equipamento tag obrigatório iiii];)'");
-        }
-        if (chamado.getSala() == null || chamado.getSala().isEmpty()) {
-            throw new RuntimeException("Sala obrigatório iiii];)'");
+        if (chamado.getEquipamento() == null) {
+            throw new RuntimeException("Equipamento obrigatório");
         }
         if (chamado.getProblemaRelatado() == null || chamado.getProblemaRelatado().isEmpty()) {
             throw new RuntimeException("O problema relatado é obrigatório iiii];)'");

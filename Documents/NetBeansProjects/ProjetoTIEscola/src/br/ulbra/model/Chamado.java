@@ -3,9 +3,8 @@ package br.ulbra.model;
 public class Chamado {
 
     private int id;
-    private String solicitante;
-    private String sala;
-    private String equipamentoTag;
+    private Usuario usuario;
+    private Equipamento equipamento;
     private String problemaRelatado;
     private String diagnosticoTecnico;
     private String prioridade;
@@ -15,14 +14,10 @@ public class Chamado {
     public Chamado() {
     }
 
-    public Chamado(int id, String solicitante, String sala, String equipamentoTag,
-            String problemaRelatado, String diagnosticoTecnico,
+    public Chamado(int id,String problemaRelatado, String diagnosticoTecnico,
             String prioridade, String status, String dataAbertura) {
 
         this.id = id;
-        this.solicitante = solicitante;
-        this.sala = sala;
-        this.equipamentoTag = equipamentoTag;
         this.problemaRelatado = problemaRelatado;
         this.diagnosticoTecnico = diagnosticoTecnico;
         this.prioridade = prioridade;
@@ -36,30 +31,6 @@ public class Chamado {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getSolicitante() {
-        return solicitante;
-    }
-
-    public void setSolicitante(String solicitante) {
-        this.solicitante = solicitante;
-    }
-
-    public String getSala() {
-        return sala;
-    }
-
-    public void setSala(String sala) {
-        this.sala = sala;
-    }
-
-    public String getEquipamentoTag() {
-        return equipamentoTag;
-    }
-
-    public void setEquipamentoTag(String equipamentoTag) {
-        this.equipamentoTag = equipamentoTag;
     }
 
     public String getProblemaRelatado() {
@@ -101,6 +72,20 @@ public class Chamado {
     public void setDataAbertura(String dataAbertura) {
         this.dataAbertura = dataAbertura;
     }
+public Usuario getUsuario() {
+    return usuario;
+}
 
-   
+public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+}
+
+public Equipamento getEquipamento() {
+    return equipamento;
+}
+
+public void setEquipamento(Equipamento equipamento) {
+    this.equipamento = equipamento;
+}
+
 }
