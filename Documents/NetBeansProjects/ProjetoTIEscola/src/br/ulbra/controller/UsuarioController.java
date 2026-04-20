@@ -43,7 +43,7 @@ public class UsuarioController {
 
         try {
             Usuario usuario = new Usuario();
-
+            usuario.setId_usuario(id_usuario);
             usuario.setNome(nome);
             usuario.setCargo(cargo);
             usuario.setEmail(email);

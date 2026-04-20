@@ -101,7 +101,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             stmt.setString(2, usuario.getCargo());
             stmt.setString(3, usuario.getEmail());
             stmt.setString(4, usuario.getSenha());
-            stmt.setInt(9, usuario.getId_usuario());
+            stmt.setInt(5, usuario.getId_usuario());
 
             stmt.executeUpdate();
 

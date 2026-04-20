@@ -5,6 +5,12 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.controller.UsuarioController;
+import br.ulbra.model.Usuario;
+import br.ulbra.service.UsuarioService;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +22,7 @@ public class UsuarioView extends javax.swing.JFrame {
      */
     public UsuarioView() {
         initComponents();
+        listarTabela();
     }
 
     /**
@@ -38,10 +45,10 @@ public class UsuarioView extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtSenha = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnLimpar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuario = new javax.swing.JTable();
 
@@ -65,18 +72,33 @@ public class UsuarioView extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setText("SENHA:");
 
-        jButton1.setText("SALVAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setText("SALVAR");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("EDITAR");
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("EXCLUIR");
+        btnExcluir.setText("EXCLUIR");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("LIMPAR");
+        btnLimpar.setText("LIMPAR");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         tblUsuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,6 +111,11 @@ public class UsuarioView extends javax.swing.JFrame {
                 "id_usuario", "nome", "cargo", "email", "senha"
             }
         ));
+        tblUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUsuarioMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblUsuario);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -104,13 +131,13 @@ public class UsuarioView extends javax.swing.JFrame {
                         .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(btnSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
+                                .addComponent(btnEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
+                                .addComponent(btnExcluir)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4))
+                                .addComponent(btnLimpar))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel6)
                                 .addComponent(jLabel5)
@@ -152,10 +179,10 @@ public class UsuarioView extends javax.swing.JFrame {
                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnSalvar)
+                    .addComponent(btnEditar)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnLimpar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -163,10 +190,79 @@ public class UsuarioView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+     UsuarioController controller = new UsuarioController();
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        String mensagem = controller.cadastrar(
+                txtNome.getText(),
+                txtCargo.getText(),
+                txtEmail.getText(),
+                txtSenha.getText()
+        );
+        javax.swing.JOptionPane.showMessageDialog(null, mensagem);
+        listarTabela();
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int id_usuario = Integer.parseInt(txtId.getText());
+
+        String msg = controller.atualizar(
+                id_usuario,
+                txtNome.getText(),
+                txtCargo.getText(),
+                txtEmail.getText(),
+                txtSenha.getText()
+        );
+
+        JOptionPane.showMessageDialog(null, msg);
+        listarTabela();
+
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(null, "Deseja excluir o usuário(a) " + txtNome.getText() + " ? ", "Exclusão", JOptionPane.YES_NO_OPTION);
+        int id_usuario = Integer.parseInt(txtId.getText());
+        if (confirm == JOptionPane.YES_OPTION) {
+            String msg = controller.deletar(id_usuario);
+            JOptionPane.showMessageDialog(null, msg);
+            listarTabela();
+        } else {
+            JOptionPane.showMessageDialog(null, "Operação cancelada!");
+        }
+
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        txtId.setText(null);
+        txtNome.setText(null);
+        txtCargo.setText(null);
+        txtEmail.setText(null);
+        txtSenha.setText(null);
+        txtId.setFocusable(true);
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void tblUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuarioMouseClicked
+        int linha = tblUsuario.getSelectedRow();
+        txtId.setText(tblUsuario.getValueAt(linha, 0).toString());
+        txtNome.setText(tblUsuario.getValueAt(linha, 1).toString());
+        txtCargo.setText(tblUsuario.getValueAt(linha, 2).toString());
+        txtEmail.setText(tblUsuario.getValueAt(linha, 3).toString());
+        txtSenha.setText(tblUsuario.getValueAt(linha, 4).toString());
+    }//GEN-LAST:event_tblUsuarioMouseClicked
+    public void listarTabela() {
+
+        DefaultTableModel model = (DefaultTableModel) tblUsuario.getModel();
+        model.setRowCount(0);
+
+        for (Usuario c : controller.listar()) {
+            model.addRow(new Object[]{
+                c.getId_usuario(),
+                c.getNome(),
+                c.getCargo(),
+                c.getEmail(),
+                c.getSenha(),
+            });
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -204,10 +300,10 @@ public class UsuarioView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
