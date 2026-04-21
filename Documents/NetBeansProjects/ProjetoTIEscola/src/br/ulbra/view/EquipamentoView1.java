@@ -5,6 +5,11 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.controller.EquipamentoController;
+import br.ulbra.model.Equipamento;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author aluno.saolucas
@@ -16,6 +21,7 @@ public class EquipamentoView1 extends javax.swing.JFrame {
      */
     public EquipamentoView1() {
         initComponents();
+        listarTabela();
     }
 
     /**
@@ -31,7 +37,7 @@ public class EquipamentoView1 extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtEquipamento_tag = new javax.swing.JTextField();
+        txtPatrimonio_tag = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtTipo = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -52,7 +58,7 @@ public class EquipamentoView1 extends javax.swing.JFrame {
         jLabel2.setText("ID DO EQUIPAMENTO:");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel3.setText("TAG DO EQUIPAMENTO:");
+        jLabel3.setText("TAG DO PATRIMÔNIO:");
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setText("TIPO:");
@@ -68,10 +74,25 @@ public class EquipamentoView1 extends javax.swing.JFrame {
         });
 
         btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("EXCLUIR");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setText("LIMPAR");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         tblEquipamento.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,6 +105,11 @@ public class EquipamentoView1 extends javax.swing.JFrame {
                 "id_equipamento", "tag_equipamento", "tipo", "sala"
             }
         ));
+        tblEquipamento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEquipamentoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblEquipamento);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -101,7 +127,7 @@ public class EquipamentoView1 extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addComponent(jLabel3)
                                 .addComponent(txtTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                .addComponent(txtEquipamento_tag)
+                                .addComponent(txtPatrimonio_tag)
                                 .addComponent(txtId)
                                 .addComponent(txtSala))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -130,7 +156,7 @@ public class EquipamentoView1 extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtEquipamento_tag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtPatrimonio_tag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -152,10 +178,74 @@ public class EquipamentoView1 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    EquipamentoController controller = new EquipamentoController();
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        String mensagem = controller.cadastrar(
+                txtPatrimonio_tag.getText(),
+                txtTipo.getText(),
+                txtSala.getText()
+        );
+        javax.swing.JOptionPane.showMessageDialog(null, mensagem);
+        listarTabela();
     }//GEN-LAST:event_btnSalvarActionPerformed
+    public void listarTabela() {
+
+        DefaultTableModel model = (DefaultTableModel) tblEquipamento.getModel();
+        model.setRowCount(0);
+
+        for (Equipamento c : controller.listar()) {
+            model.addRow(new Object[]{
+                c.getIdEquipamento(),
+                c.getTagPatrimonio(),
+                c.getTipo(),
+                c.getSala()
+
+            });
+        }
+    }
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+       int idEquipamento = Integer.parseInt(txtId.getText());
+
+        String msg = controller.atualizar(
+                idEquipamento,
+                txtPatrimonio_tag.getText(),
+                txtTipo.getText(),
+                txtSala.getText()
+        );
+
+        JOptionPane.showMessageDialog(null, msg);
+        listarTabela();
+
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+      int confirm = JOptionPane.showConfirmDialog(null, "Deseja excluir o equipamento(a) " + txtPatrimonio_tag.getText() + " ? ", "Exclusão", JOptionPane.YES_NO_OPTION);
+        int idEquipamento = Integer.parseInt(txtId.getText());
+        if (confirm == JOptionPane.YES_OPTION) {
+            String msg = controller.deletar(idEquipamento);
+            JOptionPane.showMessageDialog(null, msg);
+            listarTabela();
+        } else {
+            JOptionPane.showMessageDialog(null, "Operação cancelada!");
+        }
+
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+         txtId.setText(null);
+        txtPatrimonio_tag.setText(null);
+        txtTipo.setText(null);
+        txtSala.setText(null);
+        txtId.setFocusable(true);
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void tblEquipamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEquipamentoMouseClicked
+      int linha = tblEquipamento.getSelectedRow();
+        txtId.setText(tblEquipamento.getValueAt(linha, 0).toString());
+        txtPatrimonio_tag.setText(tblEquipamento.getValueAt(linha, 1).toString());
+        txtTipo.setText(tblEquipamento.getValueAt(linha, 2).toString());
+        txtSala.setText(tblEquipamento.getValueAt(linha, 3).toString());    
+    }//GEN-LAST:event_tblEquipamentoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -205,8 +295,8 @@ public class EquipamentoView1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblEquipamento;
-    private javax.swing.JTextField txtEquipamento_tag;
     private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtPatrimonio_tag;
     private javax.swing.JTextField txtSala;
     private javax.swing.JTextField txtTipo;
     // End of variables declaration//GEN-END:variables

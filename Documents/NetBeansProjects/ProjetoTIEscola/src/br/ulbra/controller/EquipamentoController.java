@@ -39,8 +39,8 @@ public class EquipamentoController {
     public String atualizar(int id_equipamento, String tagPatrimonio, String tipo, String sala) {
 
         try {
-           Equipamento equipamento = new Equipamento();
-
+            Equipamento equipamento = new Equipamento();
+            equipamento.setIdEquipamento(id_equipamento);
             equipamento.setTagPatrimonio(tagPatrimonio);
             equipamento.setTipo(tipo);
             equipamento.setSala(sala);
