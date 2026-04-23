@@ -125,4 +125,23 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public List<Usuario> listarTodos() {
+        String sql = "Select id_usuario, nome FROM usuario ORDER BY nome";
+
+        List<Usuario> lista = new ArrayList<>();
+        try (Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId_usuario(rs.getInt("id_usuario"));
+                u.setNome(rs.getString("nome"));
+                lista.add(u);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
+    }
 }

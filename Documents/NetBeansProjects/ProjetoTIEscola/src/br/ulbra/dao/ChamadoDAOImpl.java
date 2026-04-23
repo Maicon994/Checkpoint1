@@ -47,9 +47,6 @@ public class ChamadoDAOImpl implements ChamadoDAO {
 
                 Chamado c = new Chamado(
                         rs.getInt("id"),
-                        rs.getString("solicitante"),
-                        rs.getString("sala"),
-                        rs.getString("equipamento_tag"),
                         rs.getString("problema_relatado"),
                         rs.getString("diagnostico_tecnico"),
                         rs.getString("prioridade"),
@@ -81,9 +78,7 @@ public class ChamadoDAOImpl implements ChamadoDAO {
             if (rs.next()) {
                 return new Chamado(
                         rs.getInt("id"),
-                        rs.getString("solicitante"),
-                        rs.getString("sala"),
-                        rs.getString("equipamento_tag"),
+                        rs.getString
                         rs.getString("diagnostico_tecnico"),
                         rs.getString("problema_relatado"),
                         rs.getString("prioridade"),
