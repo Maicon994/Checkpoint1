@@ -5,6 +5,10 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.dao.UsuarioDAOImpl;
+import br.ulbra.model.Usuario;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author aluno.saolucas
@@ -32,8 +36,8 @@ public class LoginView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtSenha = new javax.swing.JTextField();
         btnEntrar = new javax.swing.JButton();
+        txtSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,6 +51,11 @@ public class LoginView extends javax.swing.JFrame {
         jLabel3.setText("Senha:");
 
         btnEntrar.setText("ENTRAR");
+        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -62,8 +71,8 @@ public class LoginView extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                            .addComponent(txtSenha))))
+                            .addComponent(txtEmail)
+                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))))
                 .addContainerGap(170, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -83,7 +92,7 @@ public class LoginView extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(btnEntrar)
                 .addGap(37, 37, 37))
         );
@@ -103,6 +112,20 @@ public class LoginView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+       UsuarioDAOImpl dao = new UsuarioDAOImpl();
+        Usuario userLogado = dao.logar(txtEmail.getText(), new String(txtSenha.getPassword()));
+
+        // Dentro do botão logar da tela de Login:
+        Usuario user = dao.logar(txtEmail.getText(), new String(txtSenha.getPassword()));
+        if (user != null) {
+            new DashboardView().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Email ou Senha incorretos!");
+        }
+    }//GEN-LAST:event_btnEntrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,6 +169,6 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtSenha;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,14 +14,13 @@ public class UsuarioController {
         this.service = new UsuarioService(new UsuarioDAOImpl());
     }
 
-    public String cadastrar(String nome, String cargo, String email,
+    public String cadastrar(String nome, String email,
             String senha) {
 
         try {
             Usuario usuario = new Usuario();
 
             usuario.setNome(nome);
-            usuario.setCargo(cargo);
             usuario.setEmail(email);
             usuario.setSenha(senha);
 
@@ -38,14 +37,13 @@ public class UsuarioController {
         return service.listar();
     }
 
-    public String atualizar(int id_usuario, String nome, String cargo, String email,
+    public String atualizar(int id_usuario, String nome, String email,
             String senha) {
 
         try {
             Usuario usuario = new Usuario();
             usuario.setId_usuario(id_usuario);
             usuario.setNome(nome);
-            usuario.setCargo(cargo);
             usuario.setEmail(email);
             usuario.setSenha(senha);
 

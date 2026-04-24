@@ -6,8 +6,14 @@
 package br.ulbra.view;
 
 import br.ulbra.controller.UsuarioController;
+import br.ulbra.dao.ConnectionFactory;
+import br.ulbra.dao.UsuarioDAOImpl;
 import br.ulbra.model.Usuario;
 import br.ulbra.service.UsuarioService;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,7 +28,37 @@ public class UsuarioView extends javax.swing.JFrame {
      */
     public UsuarioView() {
         initComponents();
-        listarTabela();
+        setLocationRelativeTo(null);
+        carregarTabela();
+    }
+
+    public void carregarTabela() {
+        DefaultTableModel modelo = (DefaultTableModel) tblUsuario.getModel();
+        modelo.setNumRows(0); // Limpa a tabela antes de carregar
+
+        String sql = "SELECT * FROM Usuarios";
+
+        // O try-with-resources garante que a conexão e o statement sejam fechados
+        try (Connection con = ConnectionFactory.getConnection();
+                PreparedStatement pst = con.prepareStatement(sql)) {
+
+            // Executamos a consulta
+            try (ResultSet rs = pst.executeQuery()) {
+
+                while (rs.next()) {
+                    // Adiciona a linha no modelo da JTable
+                    modelo.addRow(new Object[]{
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                    });
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar tabela: " + e.getMessage());
+        }
     }
 
     /**
@@ -39,18 +75,16 @@ public class UsuarioView extends javax.swing.JFrame {
         txtId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        txtCargo = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtSenha = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuario = new javax.swing.JTable();
+        txtSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,9 +96,6 @@ public class UsuarioView extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("NOME:");
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel4.setText("CARGO:");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setText("EMAIL:");
@@ -130,6 +161,7 @@ public class UsuarioView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -138,18 +170,15 @@ public class UsuarioView extends javax.swing.JFrame {
                                 .addComponent(btnExcluir)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLimpar))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(txtCargo)
-                                .addComponent(txtNome)
-                                .addComponent(txtId)
-                                .addComponent(txtEmail)
-                                .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtSenha, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addComponent(txtId, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -166,18 +195,14 @@ public class UsuarioView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnEditar)
@@ -185,82 +210,155 @@ public class UsuarioView extends javax.swing.JFrame {
                     .addComponent(btnLimpar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-     UsuarioController controller = new UsuarioController();
+
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        String mensagem = controller.cadastrar(
-                txtNome.getText(),
-                txtCargo.getText(),
-                txtEmail.getText(),
-                txtSenha.getText()
-        );
-        javax.swing.JOptionPane.showMessageDialog(null, mensagem);
-        listarTabela();
+        // 1. Validar se os campos não estão vazios
+        if (txtNome.getText().isEmpty() || txtEmail.getText().isEmpty()
+                || new String(txtSenha.getPassword()).isEmpty()) {
+
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos!");
+            return; // Interrompe a execução
+        }
+
+        try {
+            // 2. Criar o objeto Model e popular com os dados da tela
+            Usuario u = new Usuario();
+            u.setNome(txtNome.getText());
+            u.setEmail(txtEmail.getText());
+
+            // No Swing, o JPasswordField retorna char[], por isso convertemos para String
+            String senhaPura = new String(txtSenha.getPassword());
+            u.setSenha(senhaPura);
+
+            // 3. Instanciar o DAO e chamar o método salvar
+            // Lembre-se que o seu salvar() agora faz o BCrypt.hashpw internamente
+            UsuarioDAOImpl dao = new UsuarioDAOImpl();
+            dao.salvar(u);
+
+            // 4. Limpar os campos após o sucesso
+            limparCampos();
+
+            // Se tiver uma JTable na tela, pode atualizar ela aqui
+            // carregarTabela();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar no formulário: " + e.getMessage());
+        }
+
     }//GEN-LAST:event_btnSalvarActionPerformed
+    private void limparCampos() {
+        txtNome.setText("");
+        txtEmail.setText("");
+        txtSenha.setText("");
+        txtNome.requestFocus(); // Volta o cursor para o nome
+
+    }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int id_usuario = Integer.parseInt(txtId.getText());
+        // 1. Verificação básica (ex: se há um ID selecionado)
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela para editar!");
+            return;
+        }
 
-        String msg = controller.atualizar(
-                id_usuario,
-                txtNome.getText(),
-                txtCargo.getText(),
-                txtEmail.getText(),
-                txtSenha.getText()
-        );
+        try {
+            // 2. Monta o objeto com os dados da tela
+            Usuario u = new Usuario();
+            u.setId_usuario(Integer.parseInt(txtId.getText()));
+            u.setNome(txtNome.getText());
+            u.setEmail(txtEmail.getText());
 
-        JOptionPane.showMessageDialog(null, msg);
-        listarTabela();
+            // Se a senha for alterada, ela será criptografada no DAO
+            String senhaPura = new String(txtSenha.getPassword());
+            u.setSenha(senhaPura);
+
+            // 3. Chama o DAO para atualizar
+            UsuarioDAOImpl dao = new UsuarioDAOImpl();
+            dao.atualizar(u);
+
+            // 4. Atualiza a interface
+            limparCampos();
+            // carregarTabela(); // Chame seu método que atualiza a JTable
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao editar: " + e.getMessage());
+        }
 
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(null, "Deseja excluir o usuário(a) " + txtNome.getText() + " ? ", "Exclusão", JOptionPane.YES_NO_OPTION);
-        int id_usuario = Integer.parseInt(txtId.getText());
-        if (confirm == JOptionPane.YES_OPTION) {
-            String msg = controller.deletar(id_usuario);
-            JOptionPane.showMessageDialog(null, msg);
-            listarTabela();
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada!");
+          if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Selecione um usuário para excluir!");
+            return;
         }
 
+        // 1. Confirmação com o usuário
+        int resposta = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir este usuário?",
+                "Confirmação", JOptionPane.YES_NO_OPTION);
+
+        if (resposta == JOptionPane.YES_OPTION) {
+            try {
+                int id = Integer.parseInt(txtId.getText());
+
+                // 2. Chama o DAO para deletar
+                UsuarioDAOImpl dao = new UsuarioDAOImpl();
+                dao.deletar(id);
+
+                // 3. Limpa e atualiza
+                limparCampos();
+                // carregarTabela();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        txtId.setText(null);
-        txtNome.setText(null);
-        txtCargo.setText(null);
-        txtEmail.setText(null);
-        txtSenha.setText(null);
-        txtId.setFocusable(true);
+
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void tblUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuarioMouseClicked
-        int linha = tblUsuario.getSelectedRow();
-        txtId.setText(tblUsuario.getValueAt(linha, 0).toString());
-        txtNome.setText(tblUsuario.getValueAt(linha, 1).toString());
-        txtCargo.setText(tblUsuario.getValueAt(linha, 2).toString());
-        txtEmail.setText(tblUsuario.getValueAt(linha, 3).toString());
-        txtSenha.setText(tblUsuario.getValueAt(linha, 4).toString());
+        int row = tblUsuario.getSelectedRow();
+        if (row >= 0) {
+            txtId.setText(tblUsuario.getValueAt(row, 0).toString());
+            txtNome.setText(tblUsuario.getValueAt(row, 1).toString());
+            txtEmail.setText(tblUsuario.getValueAt(row, 2) != null ? tblUsuario.getValueAt(row, 2).toString() : "");
+            txtSenha.setText(tblUsuario.getValueAt(row, 3) != null ? tblUsuario.getValueAt(row, 3).toString() : "");
+        }
     }//GEN-LAST:event_tblUsuarioMouseClicked
-    public void listarTabela() {
 
-        DefaultTableModel model = (DefaultTableModel) tblUsuario.getModel();
-        model.setRowCount(0);
+    private void btListarActionPerformed(java.awt.event.ActionEvent evt) {
+        DefaultTableModel modelo = (DefaultTableModel) tblUsuario.getModel();
+        modelo.setNumRows(0);
 
-        for (Usuario c : controller.listar()) {
-            model.addRow(new Object[]{
-                c.getId_usuario(),
-                c.getNome(),
-                c.getCargo(),
-                c.getEmail(),
-                c.getSenha(),
-            });
+        String sql;
+        // SQL seguro com parâmetro
+        sql = "SELECT * FROM Usuarios WHERE nome LIKE ?";
+
+        // Novamente, chamando sua Factory
+        try (Connection con = ConnectionFactory.getConnection();
+                PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setString(1, "%" + txtNome.getText() + "%");
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                modelo.addRow(new Object[]{
+                    rs.getInt("id_usuario"),
+                    rs.getString("nome"),
+                    rs.getString("email"),
+                    rs.getString("senha")
+                });
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro na consulta: " + e.getMessage());
         }
     }
 
@@ -307,15 +405,13 @@ public class UsuarioView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblUsuario;
-    private javax.swing.JTextField txtCargo;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtSenha;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }
