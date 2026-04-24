@@ -5,26 +5,28 @@ import br.ulbra.model.Chamado;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ChamadoDAOImpl implements ChamadoDAO {
 
     @Override
     public void salvar(Chamado chamado) {
-
+//id solicitante sala equipamento_tag problema_relatado diagnostico_tecnico prioridade status data_abertura
         String sql = "INSERT INTO chamado_tecnico "
-                + "(id_usuario, id_equipamento, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "(solicitante, sala, equipamento_tag, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, chamado.getUsuario().getId_usuario());
-            stmt.setInt(2, chamado.getEquipamento().getIdEquipamento());
-            stmt.setString(3, chamado.getProblemaRelatado());
-            stmt.setString(4, chamado.getDiagnosticoTecnico());
-            stmt.setString(5, chamado.getPrioridade());
-            stmt.setString(6, chamado.getStatus());
-            stmt.setString(7, chamado.getDataAbertura());
+            stmt.setString(1, chamado.getSolicitante());
+            stmt.setString(2, chamado.getSala());
+            stmt.setString(3, chamado.getEquipamentoTag());
+            stmt.setString(4, chamado.getProblemaRelatado());
+            stmt.setString(5, chamado.getDiagnosticoTecnico());
+            stmt.setString(6, chamado.getPrioridade());
+            stmt.setString(7, chamado.getStatus());
+            stmt.setString(8, chamado.getDataAbertura());
 
             stmt.executeUpdate();
 
@@ -47,6 +49,9 @@ public class ChamadoDAOImpl implements ChamadoDAO {
 
                 Chamado c = new Chamado(
                         rs.getInt("id"),
+                        rs.getString("solicitante"),
+                        rs.getString("sala"),
+                        rs.getString("equipamento_tag"),
                         rs.getString("problema_relatado"),
                         rs.getString("diagnostico_tecnico"),
                         rs.getString("prioridade"),
@@ -58,7 +63,7 @@ public class ChamadoDAOImpl implements ChamadoDAO {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(null,"Erro:"+ e.getMessage());
         }
 
         return lista;
@@ -78,9 +83,11 @@ public class ChamadoDAOImpl implements ChamadoDAO {
             if (rs.next()) {
                 return new Chamado(
                         rs.getInt("id"),
-                        rs.getString
-                        rs.getString("diagnostico_tecnico"),
+                        rs.getString("solicitante"),
+                        rs.getString("sala"),
+                        rs.getString("equipamento_tag"),
                         rs.getString("problema_relatado"),
+                        rs.getString("diagnostico_tecnico"),
                         rs.getString("prioridade"),
                         rs.getString("status"),
                         rs.getString("data_abertura")
@@ -99,7 +106,7 @@ public class ChamadoDAOImpl implements ChamadoDAO {
 
         String sql = "UPDATE chamado_tecnico SET "
                 + "solicitante = ?, sala = ?, equipamento_tag = ?, problema_relatado = ?, "
-                + "diagnostico_tecnico = ?, prioridade = ?, status = ?, dataAbertura = ? WHERE id = ?";
+                + "diagnostico_tecnico = ?, prioridade = ?, status = ?, data_abertura = ? WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -113,6 +120,7 @@ public class ChamadoDAOImpl implements ChamadoDAO {
             stmt.setString(7, chamado.getStatus());
             stmt.setString(8, chamado.getDataAbertura());
             stmt.setInt(9, chamado.getId());
+            
 
             stmt.executeUpdate();
 

@@ -15,12 +15,8 @@ public class ChamadoService {
 
     public void cadastrar(Chamado chamado) {
 
-        if (chamado.getUsuario() == null) {
-            throw new RuntimeException("Usuário obrigatório");
-        }
-
-        if (chamado.getEquipamento() == null) {
-            throw new RuntimeException("Equipamento obrigatório");
+        if (chamado.getSolicitante() == null) {
+            throw new RuntimeException("Nome do Solicitante obrigatório");
         }
         if (chamado.getProblemaRelatado() == null || chamado.getProblemaRelatado().isEmpty()) {
             throw new RuntimeException("O problema relatado é obrigatório iiii];)'");

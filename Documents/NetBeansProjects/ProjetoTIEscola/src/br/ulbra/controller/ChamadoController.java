@@ -14,11 +14,16 @@ public class ChamadoController {
         this.service = new ChamadoService(new ChamadoDAOImpl());
     }
 
-    public String cadastrar(String problemaRelatado,
-            String diagnosticoTecnico,  String prioridade, String status, String dataAbertura) {
+    public String cadastrar(String solicitante, String sala, String equipamentoTag,
+                            String problemaRelatado, String diagnosticoTecnico,
+                            String prioridade, String status, String dataAbertura) {
 
         try {
             Chamado chamado = new Chamado();
+
+            chamado.setSolicitante(solicitante);
+            chamado.setSala(sala);
+            chamado.setEquipamentoTag(equipamentoTag);
             chamado.setProblemaRelatado(problemaRelatado);
             chamado.setDiagnosticoTecnico(diagnosticoTecnico);
             chamado.setPrioridade(prioridade);
@@ -40,14 +45,21 @@ public class ChamadoController {
     public List<Chamado> listar() {
         return service.listar();
     }
-
-    public String atualizar(int id,  String problemaRelatado,
-            String diagnosticoTecnico, String prioridade, String status, String dataAbertura) {
+// id;private String solicitante;private String sala;private String equipamentoTag;
+   // private String problemaRelatado; private String diagnosticoTecnico;
+    //private String prioridade; private String status;
+   // private String dataAbertura;
+    public String atualizar(int id, String solicitante, String sala, String equipamentoTag,
+                            String problemaRelatado, String diagnosticoTecnico,
+                            String prioridade, String status, String dataAbertura) {
 
         try {
             Chamado chamado = new Chamado();
 
             chamado.setId(id);
+            chamado.setSolicitante(solicitante);
+            chamado.setSala(sala);
+            chamado.setEquipamentoTag(equipamentoTag);
             chamado.setProblemaRelatado(problemaRelatado);
             chamado.setDiagnosticoTecnico(diagnosticoTecnico);
             chamado.setPrioridade(prioridade);
@@ -73,5 +85,4 @@ public class ChamadoController {
             return "Erro: " + e.getMessage();
         }
     }
-
 }
